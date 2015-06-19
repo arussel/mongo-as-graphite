@@ -1,0 +1,13 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+var app = require('../app');
+
+const PORT=3000;
+
+var server = app.listen(PORT, function(){
+    console.log("Server listening on: http://localhost:%s", PORT);
+});
+
