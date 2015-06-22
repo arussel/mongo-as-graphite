@@ -6,7 +6,7 @@
 const PORT=3000;
 
 var app = require('../app');
-var debug = require('debug')('untitled:server');
+var debug = require('debug')('mongo-as-graphite:server');
 var http = require('http');
 
 /**
