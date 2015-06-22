@@ -78,6 +78,9 @@ var translator = {
         });
     },
     graphiteQueryToDBQuery: function(targets, from, until) {
+        if(typeof targets == "string") {
+            targets = [targets];
+        }
         return {
             key: {$in: targets},
             day: {$gte: graphiteMomentToDay(from), $lte: graphiteMomentToDay(until)}

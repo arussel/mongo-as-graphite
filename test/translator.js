@@ -57,6 +57,10 @@ describe('Translator', function(){
             var query = translator.graphiteQueryToDBQuery(["a.b.c", "x.y.z"], 1419133439, 1434681959);
             assert.deepEqual(query, {key: {$in: ["a.b.c", "x.y.z"]}, day: {$gte: 20141221, $lte: 20150619}});
         });
+        it('should create a query from a single target', function(){
+            var query = translator.graphiteQueryToDBQuery("a.b.c", 1419133439, 1434681959);
+            assert.deepEqual(query, {key: {$in: ["a.b.c"]}, day: {$gte: 20141221, $lte: 20150619}});
+        });
         it('should create a query from a range', function(){
             var query = translator.graphiteQueryToDBQuery(["a.b.c", "x.y.z"], "-120d", "-1h");
             assert.deepEqual(query.key, {$in: ["a.b.c", "x.y.z"]});

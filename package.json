@@ -11,6 +11,8 @@
     "mocha" : "~2.2.5",
     "express" : "~4.12.4",
     "cors" : "2.7.1",
-    "moment" : "2.10.3"
+    "moment" : "2.10.3",
+    "moment-timezone" : "0.4.0",
+    "body-parser" : "1.13.1"
   }
 }
