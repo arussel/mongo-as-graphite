@@ -8,15 +8,12 @@ var mongo = {
             assert.equal(err, null);
             db.collection('mm.timeseries').distinct('key', {key: {$regex: (regex)}}, null, function (err, result) {
                 assert.equal(err, null);
-                console.log("mongo result");
-                console.log(result);
                 callback(result);
             });
         });
     },
     findDatapoints: function(query, callback) {
         MongoClient.connect(url, function(err, db){
-            console.log(query);
            assert.equal(err, null);
             db.collection('mm.timeseries').find(query).sort({key: 1, day: 1}).toArray(function(err, result){
                 assert.equal(err, null);

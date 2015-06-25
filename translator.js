@@ -67,9 +67,6 @@ var translator = {
             return {
                 target: key,
                 datapoints: _.map(values, function(datapoint){
-                    console.log(datapoint);
-                    console.log(key);
-                    console.log(datapoint.value.length);
                     var day = datapoint.day;
                     var value = _.endsWith(key, "array") ? datapoint.value.length : datapoint.value;
                     return [value, dayAsIntToTimestamp(day)]
@@ -78,7 +75,9 @@ var translator = {
         });
     },
     graphiteQueryToDBQuery: function(targets, from, until) {
-        if(typeof targets == "string") {
+        if(!targets) {
+            targets = [];
+        } else if(typeof targets == "string") {
             targets = [targets];
         }
         return {
