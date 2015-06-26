@@ -8,6 +8,7 @@ var mongo = {
             assert.equal(err, null);
             db.collection('mm.timeseries').distinct('key', {key: {$regex: (regex)}}, null, function (err, result) {
                 assert.equal(err, null);
+                db.close();
                 callback(result);
             });
         });
@@ -17,6 +18,7 @@ var mongo = {
            assert.equal(err, null);
             db.collection('mm.timeseries').find(query).sort({key: 1, day: 1}).toArray(function(err, result){
                 assert.equal(err, null);
+                db.close();
                 callback(result);
             });
         });
