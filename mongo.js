@@ -1,7 +1,13 @@
 var MongoClient = require('mongodb').MongoClient,
     assert = require('assert');
-
-var url = 'mongodb://localhost:27017/mpact';
+var mongoUser = process.env.MONGO_USER;
+var mongoPassword = process.env.MONGO_PASSWORD;
+console.log(mongoUser + ' ' + mongoPassword);
+var auth = "";
+if(mongoUser && mongoPassword) {
+    auth = mongoUser + ':' + mongoPassword + '@';
+}
+var url = 'mongodb://' + auth + 'localhost:27017/mpact';
 var mongo = {
     findKeysStartingWith: function (callback, regex) {
         MongoClient.connect(url, function(err, db) {
