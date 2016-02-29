@@ -21,8 +21,10 @@ app.get('/metrics/find/', function(req, res){
 
 app.post('/render', function(req, res) {
     var body = req.body;
-    mongo.findDatapoints(translator.graphiteQueryToDBQuery(body.target, body.from, body.until), function(result){
-        res.send(translator.dbResultFromDatapoints(result));
+    var translatedQuery = translator.graphiteQueryToDBQuery(body.target, body.from, body.until);
+    mongo.findDatapoints(translatedQuery.query, function(result){
+        var translatedResult = translator.dbResultFromDatapoints(result, translatedQuery.aliasedMapping);
+        res.send(translatedResult);
     });
 });
 

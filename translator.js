@@ -60,13 +60,14 @@ var translator = {
             });
         }
     },
-    dbResultFromDatapoints: function(result) {
-        return _.map(_.pairs(_.groupBy(result, 'key')), function(dp){
+    dbResultFromDatapoints: function (result, aliasedMapping) {
+        return _.map(_.pairs(_.groupBy(result, 'key')), function (dp) {
             var key = dp[0];
+            var mappedKey = aliasedMapping && aliasedMapping[key] ? aliasedMapping[key] : key;
             var values = dp[1];
             return {
-                target: key,
-                datapoints: _.map(values, function(datapoint){
+                target: mappedKey,
+                datapoints: _.map(values, function (datapoint) {
                     var day = datapoint.day;
                     var value = _.endsWith(key, "array") ? datapoint.value.length : datapoint.value;
                     return [value, dayAsIntToTimestamp(day)]
@@ -80,11 +81,29 @@ var translator = {
         } else if(typeof targets == "string") {
             targets = [targets];
         }
+        var aliasedMapping = {};
+        var mongoTargets = [];
+        _.map(targets, function (t) {
+            if (_.startsWith(t, 'alias(')) {
+                var splited = t.split(/[,()']/);
+                var mongoKey = splited[1];
+                var alias = splited[3];
+                mongoTargets.push(mongoKey);
+                aliasedMapping[mongoKey] = alias;
+            } else {
+                aliasedMapping[t] = t;
+                mongoTargets.push(t);
+            }
+        });
         return {
-            key: {$in: targets},
-            day: {$gte: graphiteMomentToDay(from), $lte: graphiteMomentToDay(until)}
-        };
+            aliasedMapping: aliasedMapping,
+            query: {
+                key: {$in: mongoTargets},
+                day: {$gte: graphiteMomentToDay(from), $lte: graphiteMomentToDay(until)}
+            }
+        }
+
     }
-};
+}
 
 module.exports = translator;
